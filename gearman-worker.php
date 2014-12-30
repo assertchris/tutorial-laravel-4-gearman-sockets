@@ -2,22 +2,22 @@
 
 require "vendor/autoload.php";
 
+use WebSocket\Client;
+
 $worker = new GearmanWorker();
 $worker->addServer();
 
-use WebSocket\Client;
+$client = new Client("ws://127.0.0.1:8080");
 
 $worker->addFunction(
     "ping",
-    function (GearmanJob $job) {
-        print "received: " . $job->handle() . "\n";
+    function (GearmanJob $job) use ($client) {
+        print "received: {$job->handle()}\n";
 
         for ($x = 1; $x < 6; $x++) {
-            print "sending data: ping {$x}\n";
+            print "ping {$x}\n";
             sleep(1);
         }
-
-        $client = new Client("ws://127.0.0.1:8080");
 
         $client->send(
             json_encode(
@@ -37,6 +37,4 @@ $worker->addFunction(
 
 print "waiting\n";
 
-while ($worker->work()) {
-    ;
-}
+while ($worker->work());
