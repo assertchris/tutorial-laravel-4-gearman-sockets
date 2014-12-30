@@ -1,0 +1,11 @@
+{
+    "require": {
+        "cboden/ratchet": "0.*",
+        "textalk/websocket": "1.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Formativ\\": "src"
+        }
+    }
+}
